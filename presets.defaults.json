@@ -1,0 +1,194 @@
+{
+  "performance": {
+    "renderScale": 0.75,
+    "materialQuality": "low",
+    "rendering": {
+      "exposure": 1,
+      "toneMapping": 4
+    },
+    "camera": {
+      "fov": 75,
+      "near": 0.1,
+      "far": 1000
+    },
+    "lighting": {
+      "ambientIntensity": 0.35,
+      "ambientColor": "#ffffff",
+      "dirIntensity": 0.7,
+      "dirColor": "#ffffff",
+      "dirPosition": {
+        "x": 5,
+        "y": 10,
+        "z": 5
+      }
+    },
+    "environment": {
+      "backgroundEnabled": true,
+      "environmentEnabled": true,
+      "intensity": 0.8
+    },
+    "shadows": {
+      "algorithm": 2,
+      "mapSize": 512,
+      "radius": 1,
+      "bias": 0,
+      "normalBias": 0,
+      "boxSize": 5,
+      "near": 0.5,
+      "far": 50
+    },
+    "shadowCatcher": {
+      "opacity": 0.4,
+      "color": "#000000",
+      "visible": true,
+      "y": 0,
+      "scale": 1
+    },
+    "materials": {
+      "anisotropy": 4
+    },
+    "post": {
+      "ssaoEnabled": false,
+      "ssaoRadius": 16,
+      "ssaoMinDistance": 0.005,
+      "ssaoMaxDistance": 0.1,
+      "bloomEnabled": false,
+      "bloomStrength": 0.5,
+      "bloomRadius": 0.4,
+      "bloomThreshold": 0.85,
+      "smaaEnabled": false,
+      "smaaThreshold": 0.1,
+      "vignetteEnabled": false,
+      "vignetteOffset": 1,
+      "vignetteDarkness": 1.1
+    }
+  },
+  "quality": {
+    "renderScale": 1,
+    "materialQuality": "medium",
+    "rendering": {
+      "exposure": 1,
+      "toneMapping": 4
+    },
+    "camera": {
+      "fov": 75,
+      "near": 0.1,
+      "far": 1000
+    },
+    "lighting": {
+      "ambientIntensity": 0.45,
+      "ambientColor": "#ffffff",
+      "dirIntensity": 0.9,
+      "dirColor": "#ffffff",
+      "dirPosition": {
+        "x": 5,
+        "y": 10,
+        "z": 5
+      }
+    },
+    "environment": {
+      "backgroundEnabled": true,
+      "environmentEnabled": true,
+      "intensity": 1
+    },
+    "shadows": {
+      "algorithm": 2,
+      "mapSize": 2048,
+      "radius": 4,
+      "bias": 0,
+      "normalBias": 0,
+      "boxSize": 5,
+      "near": 0.5,
+      "far": 50
+    },
+    "shadowCatcher": {
+      "opacity": 0.4,
+      "color": "#000000",
+      "visible": true,
+      "y": 0,
+      "scale": 1
+    },
+    "materials": {
+      "anisotropy": 8
+    },
+    "post": {
+      "ssaoEnabled": false,
+      "ssaoRadius": 16,
+      "ssaoMinDistance": 0.005,
+      "ssaoMaxDistance": 0.1,
+      "bloomEnabled": true,
+      "bloomStrength": 0.1,
+      "bloomRadius": 0.1,
+      "bloomThreshold": 0.85,
+      "smaaEnabled": true,
+      "smaaThreshold": 0.1,
+      "vignetteEnabled": true,
+      "vignetteOffset": 1,
+      "vignetteDarkness": 1.1
+    }
+  },
+  "pro": {
+    "renderScale": 1.5,
+    "materialQuality": "max",
+    "rendering": {
+      "exposure": 1.05,
+      "toneMapping": 4
+    },
+    "camera": {
+      "fov": 75,
+      "near": 0.1,
+      "far": 1000
+    },
+    "lighting": {
+      "ambientIntensity": 0.55,
+      "ambientColor": "#ffffff",
+      "dirIntensity": 1.1,
+      "dirColor": "#ffffff",
+      "dirPosition": {
+        "x": 5,
+        "y": 10,
+        "z": 5
+      }
+    },
+    "environment": {
+      "backgroundEnabled": true,
+      "environmentEnabled": true,
+      "intensity": 1.25
+    },
+    "shadows": {
+      "algorithm": 2,
+      "mapSize": 4096,
+      "radius": 8,
+      "bias": 0,
+      "normalBias": 0,
+      "boxSize": 5,
+      "near": 0.5,
+      "far": 50
+    },
+    "shadowCatcher": {
+      "opacity": 0.4,
+      "color": "#000000",
+      "visible": true,
+      "y": 0,
+      "scale": 1
+    },
+    "materials": {
+      "anisotropy": 16
+    },
+    "post": {
+      "ssaoEnabled": false,
+      "ssaoRadius": 16,
+      "ssaoMinDistance": 0.005,
+      "ssaoMaxDistance": 0.1,
+      "bloomEnabled": true,
+      "bloomStrength": 0.1,
+      "bloomRadius": 0.1,
+      "bloomThreshold": 0.85,
+      "smaaEnabled": true,
+      "smaaThreshold": 0.1,
+      "vignetteEnabled": true,
+      "vignetteOffset": 1,
+      "vignetteDarkness": 1.1
+    }
+  }
+}

@@ -1,0 +1,207 @@
+<div id="ui" class="mobile-collapsed">
+    <div class="mobile-handle"></div>
+
+    <div class="ui-header">
+        <div class="brand">ESTUDIO <span>3D</span> Pro</div>
+        <button id="close-menu">✕</button>
+    </div>
+
+    <div class="ui-tabs">
+        <button class="tab-btn active" data-tab="tab-model">📦 OBJETO</button>
+        <button class="tab-btn" data-tab="tab-light">🔆 ESCENA</button>
+    </div>
+
+    <div class="ui-content">
+        <div id="tab-model" class="tab-pane active">
+            <div class="control-group">
+                <label>Modelo Activo</label>
+                <select id="model-select"><option>Cargando...</option></select>
+            </div>
+            
+            <div class="control-group row-flex">
+                <label>Giro Automático</label>
+                <label class="switch">
+                    <input type="checkbox" id="auto-rotate">
+                    <span class="slider-round"></span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label>Rotación Manual</label>
+                <input id="model-rotation" type="range" min="0" max="360" step="1" value="0">
+            </div>
+        </div>
+
+        <div id="tab-light" class="tab-pane">
+            <div class="control-group">
+                <label>Preset de calidad</label>
+                <select id="quality-preset">
+                    <option value="performance">MODO RENDIMIENTO</option>
+                    <option value="quality" selected>MODO CALIDAD</option>
+                    <option value="pro">MODO PRO</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Exposición HDR</label>
+                <input type="range" id="exposure-slider" min="0.1" max="4" step="0.1" value="1">
+            </div>
+
+            <div class="control-group">
+                <label>Intensidad Luz</label>
+                <input type="range" id="light-intensity" min="0" max="5" step="0.1" value="1">
+            </div>
+
+            <div class="control-group">
+                <label>Ángulo de Luz</label>
+                <input type="range" id="light-angle" min="0" max="6.28" step="0.01" value="0.5">
+            </div>
+
+            <div class="control-group">
+                <label>Opacidad Sombra</label>
+                <input type="range" id="shadow-slider" min="0" max="1" step="0.01" value="0.4">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<button id="open-menu">⚙️ Configuración</button>
+
+<style>
+    :root { --accent: #007aff; --bg-glass: rgba(20, 20, 20, 0.85); --border-glass: rgba(255, 255, 255, 0.1); }
+    * { box-sizing: border-box; }
+    #ui { 
+        position: absolute; bottom: max(20px, env(safe-area-inset-bottom)); left: max(20px, env(safe-area-inset-left)); width: min(320px, calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: min(80vh, calc(100dvh - 40px));
+        background: var(--bg-glass); backdrop-filter: blur(15px); border: 1px solid var(--border-glass);
+        color: white; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; z-index: 1000;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    #ui.hidden { transform: translateY(20px); opacity: 0; pointer-events: none; }
+    .ui-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); }
+    .brand { font-weight: bold; letter-spacing: 1px; }
+    .brand span { color: var(--accent); }
+    #close-menu { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .ui-tabs { display: flex; background: rgba(0,0,0,0.2); }
+    .tab-btn { flex: 1; padding: 12px; border: none; background: none; color: #888; cursor: pointer; font-size: 11px; font-weight: bold; }
+    .tab-btn.active { color: white; border-bottom: 2px solid var(--accent); }
+    .ui-content { padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    .control-group { margin-bottom: 15px; }
+    .control-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 8px; }
+    .row-flex { display: flex; justify-content: space-between; align-items: center; }
+    select { width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #444; font-size: 13px; outline: none; }
+    .control-group small { display: block; margin-top: 8px; color: #9aa0a6; font-size: 11px; line-height: 1.35; }
+    input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    
+    #open-menu {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        padding: 12px 20px;
+        border-radius: 30px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        display: none;
+        cursor: pointer;
+        z-index: 999;
+    }
+
+    #ui.hidden + #open-menu,
+    #ui.hidden ~ #open-menu {
+        display: block;
+    }
+
+    .switch { position: relative; width: 40px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider-round { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 20px; cursor: pointer; }
+    .slider-round:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider-round { background-color: var(--accent); }
+    input:checked + .slider-round:before { transform: translateX(20px); }
+
+    .mobile-handle { display: none; }
+
+    @media (max-width: 768px) {
+        #ui {
+            left: max(8px, env(safe-area-inset-left));
+            right: max(8px, env(safe-area-inset-right));
+            bottom: max(8px, env(safe-area-inset-bottom));
+            width: auto;
+            max-height: min(70dvh, 560px);
+            border-radius: 18px;
+            transition: transform 0.28s ease, opacity 0.28s ease, max-height 0.28s ease;
+            will-change: transform;
+        }
+
+        #ui.hidden {
+            transform: translateY(calc(100% + 20px));
+            opacity: 0;
+        }
+
+        #ui.mobile-collapsed {
+            transform: translateY(calc(100% - 88px));
+            opacity: 1;
+        }
+
+        #ui.mobile-collapsed .ui-tabs,
+        #ui.mobile-collapsed .ui-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #ui.mobile-expanded {
+            transform: translateY(0);
+        }
+
+        .mobile-handle {
+            display: block;
+            width: 44px;
+            height: 5px;
+            border-radius: 999px;
+            margin: 10px auto 6px;
+            background: rgba(255,255,255,0.22);
+        }
+
+        .ui-header {
+            padding: 12px 16px;
+            cursor: pointer;
+        }
+
+        .ui-content {
+            padding: 16px;
+            overscroll-behavior: contain;
+        }
+
+        .ui-tabs,
+        .ui-content {
+            transition: opacity 0.18s ease;
+        }
+
+        .tab-btn {
+            min-height: 44px;
+            padding: 10px 8px;
+        }
+
+        select,
+        input[type=range],
+        #close-menu,
+        #open-menu {
+            touch-action: manipulation;
+        }
+
+        #close-menu {
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #open-menu {
+            display: none !important;
+        }
+    }
+</style>
