@@ -161,6 +161,10 @@ function bindUi() {
     const closeMenuBtn = document.getElementById('close-menu');
     const mobileHandle = ui?.querySelector('.mobile-handle');
     const uiHeader = ui?.querySelector('.ui-header');
+    const uiContent = ui?.querySelector('.ui-content');
+    const scrollZone = ui?.querySelector('.scroll-grab-zone');
+    const scrollTrack = ui?.querySelector('.scroll-track');
+    const scrollThumb = ui?.querySelector('.scroll-thumb');
     const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
 
     const isMobileSheet = () => mobileMediaQuery.matches;
@@ -185,10 +189,15 @@ function bindUi() {
         } else {
             ui.classList.remove('mobile-expanded', 'mobile-collapsed');
             ui.classList.remove('hidden');
+
             if (openMenuBtn) {
                 openMenuBtn.style.display = 'none';
             }
         }
+
+        requestAnimationFrame(() => {
+            uiContent?.dispatchEvent(new Event('scroll'));
+        });
     };
 
     const bind = (id, eventName, handler) => {
@@ -211,6 +220,14 @@ function bindUi() {
 
             button.classList.add('active');
             targetPane?.classList.add('active');
+
+            if (uiContent) {
+                uiContent.scrollTop = 0;
+            }
+
+            requestAnimationFrame(() => {
+                uiContent?.dispatchEvent(new Event('scroll'));
+            });
 
             if (isMobileSheet()) {
                 setMobileSheetState(true);
@@ -264,17 +281,21 @@ function bindUi() {
 
     let touchStartY = 0;
     let touchEndY = 0;
+
     const trackStart = (event) => {
         touchStartY = event.touches[0]?.clientY ?? 0;
         touchEndY = touchStartY;
     };
+
     const trackMove = (event) => {
         touchEndY = event.touches[0]?.clientY ?? touchEndY;
     };
+
     const trackEnd = () => {
         if (!isMobileSheet()) return;
 
         const deltaY = touchEndY - touchStartY;
+
         if (deltaY <= -30) {
             setMobileSheetState(true);
         } else if (deltaY >= 30) {
@@ -287,6 +308,106 @@ function bindUi() {
         element?.addEventListener('touchmove', trackMove, { passive: true });
         element?.addEventListener('touchend', trackEnd, { passive: true });
     });
+
+    if (scrollZone && uiContent && scrollTrack && scrollThumb) {
+        let startY = 0;
+        let startScroll = 0;
+        let draggingScrollZone = false;
+
+        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        const updateCustomScrollbar = () => {
+            if (!isMobileSheet()) return;
+
+            const contentHeight = uiContent.clientHeight;
+            const scrollHeight = uiContent.scrollHeight;
+            const scrollTop = uiContent.scrollTop;
+            const trackHeight = scrollTrack.clientHeight;
+
+            if (!contentHeight || !scrollHeight || !trackHeight) return;
+
+            const maxScroll = Math.max(scrollHeight - contentHeight, 0);
+
+            if (maxScroll <= 0) {
+                scrollThumb.style.opacity = '0';
+                scrollThumb.style.transform = 'translateY(0px)';
+                scrollThumb.style.height = `${trackHeight}px`;
+                return;
+            }
+
+            scrollThumb.style.opacity = '1';
+
+            const visibleRatio = contentHeight / scrollHeight;
+            const thumbHeight = clamp(trackHeight * visibleRatio, 28, trackHeight);
+            const maxThumbTravel = trackHeight - thumbHeight;
+            const scrollRatio = scrollTop / maxScroll;
+            const thumbY = maxThumbTravel * scrollRatio;
+
+            scrollThumb.style.height = `${thumbHeight}px`;
+            scrollThumb.style.transform = `translateY(${thumbY}px)`;
+        };
+
+        const scrollFromTouch = (clientY) => {
+            const delta = clientY - startY;
+            const contentHeight = uiContent.clientHeight;
+            const scrollHeight = uiContent.scrollHeight;
+            const trackHeight = scrollTrack.clientHeight;
+            const thumbHeight = scrollThumb.offsetHeight || 28;
+
+            const maxScroll = Math.max(scrollHeight - contentHeight, 0);
+            const maxThumbTravel = Math.max(trackHeight - thumbHeight, 1);
+
+            if (maxScroll <= 0) return;
+
+            const scrollPerPixel = maxScroll / maxThumbTravel;
+            uiContent.scrollTop = startScroll + (delta * scrollPerPixel);
+        };
+
+        uiContent.addEventListener('scroll', updateCustomScrollbar, { passive: true });
+        window.addEventListener('resize', updateCustomScrollbar, { passive: true });
+        window.addEventListener('orientationchange', updateCustomScrollbar, { passive: true });
+
+        scrollZone.addEventListener('touchstart', (e) => {
+            const touch = e.touches?.[0];
+            if (!touch) return;
+
+            startY = touch.clientY;
+            startScroll = uiContent.scrollTop;
+            draggingScrollZone = true;
+            updateCustomScrollbar();
+        }, { passive: true });
+
+        scrollZone.addEventListener('touchmove', (e) => {
+            if (!draggingScrollZone) return;
+
+            const touch = e.touches?.[0];
+            if (!touch) return;
+
+            scrollFromTouch(touch.clientY);
+            updateCustomScrollbar();
+            e.preventDefault();
+        }, { passive: false });
+
+        const endScrollZoneDrag = () => {
+            draggingScrollZone = false;
+        };
+
+        scrollZone.addEventListener('touchend', endScrollZoneDrag, { passive: true });
+        scrollZone.addEventListener('touchcancel', endScrollZoneDrag, { passive: true });
+
+        requestAnimationFrame(updateCustomScrollbar);
+
+        const tabsObserver = new MutationObserver(() => {
+            requestAnimationFrame(updateCustomScrollbar);
+        });
+
+        tabsObserver.observe(uiContent, {
+            subtree: true,
+            childList: true,
+            attributes: true,
+            attributeFilter: ['class', 'style']
+        });
+    }
 
     mobileMediaQuery.addEventListener?.('change', syncResponsiveUiMode);
     window.addEventListener('orientationchange', syncResponsiveUiMode, { passive: true });
@@ -392,6 +513,10 @@ async function loadModelsList() {
                         applyQualityPreset(currentQualityPreset, false);
                         syncSimpleUiFromState();
                         setStatus('');
+
+                        requestAnimationFrame(() => {
+                            document.querySelector('.ui-content')?.dispatchEvent(new Event('scroll'));
+                        });
                     },
                     onError: () => {
                         setStatus('No se pudo cargar el modelo seleccionado.', 'error');
@@ -409,6 +534,10 @@ async function loadModelsList() {
                 applyQualityPreset(currentQualityPreset, false);
                 syncSimpleUiFromState();
                 setStatus('');
+
+                requestAnimationFrame(() => {
+                    document.querySelector('.ui-content')?.dispatchEvent(new Event('scroll'));
+                });
             },
             onError: () => {
                 setStatus('No se pudo cargar el modelo inicial.', 'error');
@@ -442,6 +571,10 @@ function handleViewportResize() {
     }
 
     controls.update();
+
+    requestAnimationFrame(() => {
+        document.querySelector('.ui-content')?.dispatchEvent(new Event('scroll'));
+    });
 }
 
 function animate() {
