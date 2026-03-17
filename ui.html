@@ -17,7 +17,7 @@
                 <label>Modelo Activo</label>
                 <select id="model-select"><option>Cargando...</option></select>
             </div>
-            
+
             <div class="control-group row-flex">
                 <label>Giro Automático</label>
                 <label class="switch">
@@ -63,6 +63,12 @@
             </div>
         </div>
     </div>
+
+    <div class="scroll-grab-zone" aria-hidden="true">
+        <div class="scroll-track">
+            <div class="scroll-thumb"></div>
+        </div>
+    </div>
 </div>
 
 <button id="open-menu">⚙️ Configuración</button>
@@ -72,13 +78,16 @@
         --accent: #007aff;
         --bg-glass: rgba(20, 20, 20, 0.85);
         --border-glass: rgba(255, 255, 255, 0.1);
+        --mobile-sheet-height: 260px;
+        --scrollbar-thumb: rgba(255, 255, 255, 0.28);
+        --scrollbar-track: rgba(255, 255, 255, 0.08);
     }
 
     * {
         box-sizing: border-box;
     }
 
-    #ui { 
+    #ui {
         position: absolute;
         bottom: max(20px, env(safe-area-inset-bottom));
         left: max(20px, env(safe-area-inset-left));
@@ -157,6 +166,23 @@
         -webkit-overflow-scrolling: touch;
         flex: 1 1 auto;
         min-height: 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) transparent;
+    }
+
+    .ui-content::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .ui-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .ui-content::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
     }
 
     .tab-pane {
@@ -182,6 +208,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
     }
 
     select {
@@ -208,7 +235,7 @@
         accent-color: var(--accent);
         cursor: pointer;
     }
-    
+
     #open-menu {
         position: absolute;
         bottom: 30px;
@@ -232,6 +259,7 @@
         position: relative;
         width: 40px;
         height: 20px;
+        flex: 0 0 auto;
     }
 
     .switch input {
@@ -273,15 +301,27 @@
         display: none;
     }
 
+    .scroll-grab-zone {
+        display: none;
+    }
+
+    .scroll-track {
+        display: none;
+    }
+
+    .scroll-thumb {
+        display: none;
+    }
+
     @media (max-width: 768px) {
         #ui {
             left: max(8px, env(safe-area-inset-left));
             right: max(8px, env(safe-area-inset-right));
             bottom: max(8px, env(safe-area-inset-bottom));
             width: auto;
-            height: 260px;
-            max-height: 260px;
-            min-height: 260px;
+            height: var(--mobile-sheet-height);
+            min-height: var(--mobile-sheet-height);
+            max-height: var(--mobile-sheet-height);
             border-radius: 16px;
             background: rgba(20, 20, 25, 0.75);
             backdrop-filter: blur(12px);
@@ -300,7 +340,8 @@
         }
 
         #ui.mobile-collapsed .ui-tabs,
-        #ui.mobile-collapsed .ui-content {
+        #ui.mobile-collapsed .ui-content,
+        #ui.mobile-collapsed .scroll-grab-zone {
             opacity: 0;
             pointer-events: none;
         }
@@ -331,7 +372,8 @@
         }
 
         .ui-tabs,
-        .ui-content {
+        .ui-content,
+        .scroll-grab-zone {
             transition: opacity 0.18s ease;
         }
 
@@ -346,8 +388,54 @@
         }
 
         .ui-content {
-            padding: 12px 14px 14px;
+            padding: 12px 28px 14px 14px;
             overscroll-behavior: contain;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .ui-content::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .scroll-grab-zone {
+            display: block;
+            position: absolute;
+            top: 86px;
+            right: 0;
+            width: 30px;
+            height: calc(100% - 86px);
+            z-index: 12;
+            touch-action: none;
+        }
+
+        .scroll-track {
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            bottom: 12px;
+            width: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+        }
+
+        .scroll-thumb {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            min-height: 28px;
+            height: 42px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.36);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+            transform: translateY(0);
+            transition: transform 0.08s linear, height 0.12s ease, opacity 0.12s ease;
+            opacity: 1;
         }
 
         .control-group {
@@ -387,7 +475,6 @@
         }
 
         select,
-        input[type=range],
         #open-menu {
             touch-action: manipulation;
         }
