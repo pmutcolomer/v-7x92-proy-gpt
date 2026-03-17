@@ -61,7 +61,6 @@
                 <label>Opacidad Sombra</label>
                 <input type="range" id="shadow-slider" min="0" max="1" step="0.01" value="0.4">
             </div>
-
         </div>
     </div>
 </div>
@@ -69,31 +68,146 @@
 <button id="open-menu">⚙️ Configuración</button>
 
 <style>
-    :root { --accent: #007aff; --bg-glass: rgba(20, 20, 20, 0.85); --border-glass: rgba(255, 255, 255, 0.1); }
-    * { box-sizing: border-box; }
+    :root {
+        --accent: #007aff;
+        --bg-glass: rgba(20, 20, 20, 0.85);
+        --border-glass: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
     #ui { 
-        position: absolute; bottom: max(20px, env(safe-area-inset-bottom)); left: max(20px, env(safe-area-inset-left)); width: min(320px, calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: min(80vh, calc(100dvh - 40px));
-        background: var(--bg-glass); backdrop-filter: blur(15px); border: 1px solid var(--border-glass);
-        color: white; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; z-index: 1000;
+        position: absolute;
+        bottom: max(20px, env(safe-area-inset-bottom));
+        left: max(20px, env(safe-area-inset-left));
+        width: min(320px, calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        max-height: min(80vh, calc(100dvh - 40px));
+        background: var(--bg-glass);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--border-glass);
+        color: white;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
         transition: transform 0.3s ease, opacity 0.3s ease;
     }
-    #ui.hidden { transform: translateY(20px); opacity: 0; pointer-events: none; }
-    .ui-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); }
-    .brand { font-weight: bold; letter-spacing: 1px; }
-    .brand span { color: var(--accent); }
-    #close-menu { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-    .ui-tabs { display: flex; background: rgba(0,0,0,0.2); }
-    .tab-btn { flex: 1; padding: 12px; border: none; background: none; color: #888; cursor: pointer; font-size: 11px; font-weight: bold; }
-    .tab-btn.active { color: white; border-bottom: 2px solid var(--accent); }
-    .ui-content { padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-    .control-group { margin-bottom: 15px; }
-    .control-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 8px; }
-    .row-flex { display: flex; justify-content: space-between; align-items: center; }
-    select { width: 100%; padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #444; font-size: 13px; outline: none; }
-    .control-group small { display: block; margin-top: 8px; color: #9aa0a6; font-size: 11px; line-height: 1.35; }
-    input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+    #ui.hidden {
+        transform: translateY(20px);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .ui-header {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-glass);
+        flex: 0 0 auto;
+    }
+
+    .brand {
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .brand span {
+        color: var(--accent);
+    }
+
+    #close-menu {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .ui-tabs {
+        display: flex;
+        background: rgba(0, 0, 0, 0.2);
+        flex: 0 0 auto;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        background: none;
+        color: #888;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .tab-btn.active {
+        color: white;
+        border-bottom: 2px solid var(--accent);
+    }
+
+    .ui-content {
+        padding: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .tab-pane {
+        display: none;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    .control-group {
+        margin-bottom: 15px;
+    }
+
+    .control-group label {
+        display: block;
+        font-size: 12px;
+        color: #aaa;
+        margin-bottom: 8px;
+    }
+
+    .row-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #333;
+        color: white;
+        border: 1px solid #444;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .control-group small {
+        display: block;
+        margin-top: 8px;
+        color: #9aa0a6;
+        font-size: 11px;
+        line-height: 1.35;
+    }
+
+    input[type=range] {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+    }
     
     #open-menu {
         position: absolute;
@@ -114,14 +228,50 @@
         display: block;
     }
 
-    .switch { position: relative; width: 40px; height: 20px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider-round { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 20px; cursor: pointer; }
-    .slider-round:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider-round { background-color: var(--accent); }
-    input:checked + .slider-round:before { transform: translateX(20px); }
+    .switch {
+        position: relative;
+        width: 40px;
+        height: 20px;
+    }
 
-    .mobile-handle { display: none; }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider-round {
+        position: absolute;
+        inset: 0;
+        background-color: #444;
+        transition: .4s;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .slider-round:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider-round {
+        background-color: var(--accent);
+    }
+
+    input:checked + .slider-round:before {
+        transform: translateX(20px);
+    }
+
+    .mobile-handle {
+        display: none;
+    }
 
     @media (max-width: 768px) {
         #ui {
@@ -129,9 +279,13 @@
             right: max(8px, env(safe-area-inset-right));
             bottom: max(8px, env(safe-area-inset-bottom));
             width: auto;
-            max-height: min(70dvh, 560px);
-            border-radius: 18px;
-            transition: transform 0.28s ease, opacity 0.28s ease, max-height 0.28s ease;
+            height: 260px;
+            max-height: 260px;
+            min-height: 260px;
+            border-radius: 16px;
+            background: rgba(20, 20, 25, 0.75);
+            backdrop-filter: blur(12px);
+            transition: transform 0.28s ease, opacity 0.28s ease;
             will-change: transform;
         }
 
@@ -141,7 +295,7 @@
         }
 
         #ui.mobile-collapsed {
-            transform: translateY(calc(100% - 88px));
+            transform: translateY(calc(100% - 72px));
             opacity: 1;
         }
 
@@ -157,21 +311,23 @@
 
         .mobile-handle {
             display: block;
-            width: 44px;
-            height: 5px;
+            width: 38px;
+            height: 4px;
             border-radius: 999px;
-            margin: 10px auto 6px;
-            background: rgba(255,255,255,0.22);
+            margin: 8px auto 4px;
+            background: rgba(255, 255, 255, 0.22);
+            flex: 0 0 auto;
         }
 
         .ui-header {
-            padding: 12px 16px;
+            padding: 10px 14px;
+            min-height: 44px;
             cursor: pointer;
         }
 
-        .ui-content {
-            padding: 16px;
-            overscroll-behavior: contain;
+        .brand {
+            font-size: 13px;
+            letter-spacing: 0.6px;
         }
 
         .ui-tabs,
@@ -179,25 +335,65 @@
             transition: opacity 0.18s ease;
         }
 
+        .ui-tabs {
+            min-height: 38px;
+        }
+
         .tab-btn {
-            min-height: 44px;
-            padding: 10px 8px;
+            min-height: 38px;
+            padding: 8px 6px;
+            font-size: 10px;
+        }
+
+        .ui-content {
+            padding: 12px 14px 14px;
+            overscroll-behavior: contain;
+        }
+
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        .control-group label {
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        select {
+            padding: 8px 10px;
+            min-height: 36px;
+            border-radius: 7px;
+            font-size: 12px;
+        }
+
+        input[type=range] {
+            min-height: 18px;
+        }
+
+        .switch {
+            width: 34px;
+            height: 18px;
+        }
+
+        .slider-round:before {
+            width: 12px;
+            height: 12px;
+            left: 3px;
+            bottom: 3px;
+        }
+
+        input:checked + .slider-round:before {
+            transform: translateX(16px);
         }
 
         select,
         input[type=range],
-        #close-menu,
         #open-menu {
             touch-action: manipulation;
         }
 
         #close-menu {
-            font-size: 18px;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: none !important;
         }
 
         #open-menu {
